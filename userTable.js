@@ -37,7 +37,7 @@ function editUser(person, params, callback){
     db.run(`UPDATE users as u SET userName = ?, password = ? WHERE ${person.id} = u.id`, params, (err) =>{
         if(err)
             console.log(`erro: ${err}`)
-                 
+
             callback(err)  
     })
 }
@@ -58,7 +58,7 @@ function getUserById(id, callback){
 }
 
 function deleteUserById(id, callback){
-    db.run(`DELETE FROM users WHERE users.id = ${id}`, (err) =>{
+    db.all(`DELETE FROM users WHERE users.id = ${id}`, (err) =>{        
         callback(err)
     })
 }

@@ -9,8 +9,3 @@ class Person {
 }
 
 module.exports = Person
-
-
-let eae = ['eae', 'eae']
-
-console.log(eae.map((e) => '(?)').join(',')) 

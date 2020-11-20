@@ -7,7 +7,7 @@ const Answer = require('./Answer')
 
 
  app.use((req, res, next) => {
-     console.log(`new request made: ${Date.now()} at ${req.url}`)
+     console.log(`new request made: ${Date.now()} at ${req.url} type: ${req.method}`)
      next()
  })
 
@@ -37,6 +37,7 @@ app.get('/users/:id', (req, res) => {
         if(err){
             let response = Answer.createFailResponse()
             response.error = err
+            res.statusCode = 404
             console.log(response)
             res.send('Usuario nao encontrado')
             return
@@ -62,6 +63,7 @@ app.post('/users', (req, res) => {
         if(err){
             console.log("failed")
             let response = Answer.createFailResponse()
+            res.statusCode = 400
             response.reason = 'Failed to create User!'
             response.detailedReason = err
             res.send(response)
@@ -88,6 +90,7 @@ app.put('/users/:id', (req, res) => {
     users.editUser(person, params,(err) => {
         if(err){
             console.log("failed to edit")
+            res.statusCode = 400
             let response = Answer.createFailResponse()
             response.reason = 'Failed to edit user!'
             response.detailedReason = err
@@ -106,7 +109,7 @@ app.delete('/users/:id', (req, res) => {
     let id = req.params.id   
     users.deleteUserById(id, (err) => {
         if(err){
-            res.statusCode = 501
+            res.statusCode = 404
             let response = Answer.createFailResponse()
             response.reason = 'Failed to delete!'
             response.detailedReason = err
