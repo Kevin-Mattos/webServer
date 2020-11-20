@@ -34,10 +34,11 @@ function insertUser(params, callback){
 }
 
 function editUser(person, params, callback){
-    db.run(`UPDATE users as u SET userName = ?, password = ? WHERE ${person.id} = u.id`, params, (err) =>{
-        if(err)
+    db.run(`UPDATE users as u SET userName = ?, password = ? WHERE ${person.id} = u.id`, params, function(err){
+        if(this.changes == 0 && !err){
+            callback({'erro': 'usuario nao encontrado'})
             console.log(`erro: ${err}`)
-
+        }else
             callback(err)  
     })
 }
@@ -58,8 +59,13 @@ function getUserById(id, callback){
 }
 
 function deleteUserById(id, callback){
-    db.all(`DELETE FROM users WHERE users.id = ${id}`, (err) =>{        
-        callback(err)
+    db.run(`DELETE FROM users WHERE users.id = ${id}`, function(err){  
+        console.log(`Row(s) deleted ${this.changes}`)
+        if(this.changes == 0 && !err)
+            callback({'erro': 'usuario nao encontrado'})
+        else
+            callback(err)
+
     })
 }
 
